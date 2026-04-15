@@ -1,0 +1,3 @@
+```release-note:note
+website: CDKTF programming language-specific documentation has been removed. It is no longer generated regularly or displayed on https://registry.terraform.io/providers/hashicorp/aws/latest/docs.
+```

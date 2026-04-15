@@ -994,7 +994,6 @@ tfproviderdocs: go-build ## [CI] Provider Checks / tfproviderdocs
 		-provider-source registry.terraform.io/hashicorp/aws \
 		-providers-schema-json terraform-providers-schema/schema.json \
 		-require-resource-subcategory \
-		-ignore-cdktf-missing-files \
 		-ignore-enhanced-region-check-subcategories-file website/ignore-enhanced-region-check-subcategories.txt \
 		-ignore-enhanced-region-check-data-sources-file website/ignore-enhanced-region-check-data-sources.txt \
 		-ignore-enhanced-region-check-resources-file website/ignore-enhanced-region-check-resources.txt \
@@ -1101,8 +1100,6 @@ website-markdown-lint: ## [CI] Website Checks / markdown-lint
 		-v "$(PWD):/markdown" \
 		avtodev/markdown-lint:v1.5.0 \
 		--config /markdown/.markdownlint.yml \
-		--ignore /markdown/website/docs/cdktf/python/guides \
-		--ignore /markdown/website/docs/cdktf/typescript/guides \
 		/markdown/website/docs
 
 website-misspell: ## [CI] Website Checks / misspell
@@ -1117,7 +1114,7 @@ website-terrafmt-fix: ## [CI] Fix Website / terrafmt
 	@echo "make: Fix Website / terrafmt..."
 	@echo "make: Fixing website/docs root files with terrafmt..."
 	@find ./website/docs -maxdepth 1 -type f -name '*.markdown' -exec terrafmt fmt {} \;
-	@for dir in $$(find ./website/docs -maxdepth 1 -type d ! -name docs ! -name cdktf | sort); do \
+	@for dir in $$(find ./website/docs -maxdepth 1 -type d ! -name docs | sort); do \
 		echo "make: Fixing $$dir with terrafmt..."; \
 		terrafmt fmt $$dir --pattern '*.markdown'; \
 	done
@@ -1165,7 +1162,7 @@ website-tflint: tflint-init ## [CI] Website Checks / tflint
 		set +e ; \
 		./.ci/scripts/validate-terraform-file.sh "$$filename" "$${rules[@]}" || exit_code=1 ; \
 		set -e ; \
-	done < <(find ./website/docs -not \( -path ./website/docs/cdktf -prune \) -type f -name '*.markdown' | sort -u) ; \
+	done < <(find ./website/docs -type f -name '*.markdown' | sort -u) ; \
 	exit $$exit_code
 
 yamllint: ## [CI] YAML Linting / yamllint
